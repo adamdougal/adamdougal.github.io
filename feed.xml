@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.9.5">Jekyll</generator><link href="/feed.xml" rel="self" type="application/atom+xml" /><link href="/" rel="alternate" type="text/html" /><updated>2024-06-07T15:41:58+00:00</updated><id>/feed.xml</id><title type="html">Dougal Tech</title><subtitle>Blog</subtitle><author><name>Adam Dougal</name></author><entry><title type="html">Welcome to Dougal Tech!</title><link href="/misc/2024/06/07/welcome-to-dougal-tech.html" rel="alternate" type="text/html" title="Welcome to Dougal Tech!" /><published>2024-06-07T14:00:00+00:00</published><updated>2024-06-07T14:00:00+00:00</updated><id>/misc/2024/06/07/welcome-to-dougal-tech</id><content type="html" xml:base="/misc/2024/06/07/welcome-to-dougal-tech.html"><![CDATA[<h2 id="hey-there-im-adam">Hey there, I’m Adam!</h2>
+
+<p>Welcome! 👋👋</p>
+
+<p>I’m <strong>Adam Dougal</strong>, a software engineer currently crafting solutions at 
+<a href="https://www.microsoft.com/en-gb" target="_blank">Microsoft</a>. This blog is my digital playground where I 
+share my insights on best working practices, step-by-step guides, and the intriguing aspects of software engineering 
+that keep me hooked.</p>
+
+<p>My software engineering journey began shortly after university, joining 
+<a href="https://www.sky.com/" target="_blank">Sky</a> on their Software Academy graduate scheme. I spent most of my 
+time there working on Java-based backend systems that power services like 
+<a href="https://www.sky.com/watch/sky-go/" target="_blank">Sky Go</a>, 
+<a href="https://www.nowtv.com/" target="_blank">Now TV</a>,
+and <a href="https://www.peacocktv.com/" target="_blank"> NBCU Peacock</a> to millions of customers. As I grew in my 
+role, I shifted my focus to the Internal Developer Platform, simplifying the process for developers to deploy their 
+services to Kubernetes.</p>
+
+<p>Recently, I’ve embarked on a new adventure with Microsoft, specifically with the 
+<a href="https://playbook.microsoft.com/code-with-engineering/ISE/" target="_blank">ISE team</a>. Here, I work closely 
+with Microsoft’s customers, using cutting-edge technologies like Azure and AI to solve their problems.</p>
+
+<p>I’m a staunch advocate of engineering principles like pair programming, which I believe is a cornerstone of
+collaborative and quality code. I have a passion for crafting seamless CI/CD pipelines, testing the untestable, and
+exploring the boundless opportunities within Azure and AI. I’m excited to share my journey with you!</p>
+
+<p>When I’m not decoding the latest tech trends, you can find me immersed in the adrenaline-fueled world of Formula
+One, strategizing over board games, or unwinding with my favorite films and TV shows.</p>
+
+<p>All views are my own.</p>]]></content><author><name>Adam Dougal</name></author><category term="Misc" /><category term="background" /><summary type="html"><![CDATA[Hey there, I’m Adam!]]></summary></entry></feed>
