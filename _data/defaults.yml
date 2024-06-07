@@ -1,0 +1,7 @@
+home:
+  heading: ""
+  subheading: ""
+  banner:
+    image: ""
+    height: 80px
+    background: "rgba(0, 23, 93, 1)"
