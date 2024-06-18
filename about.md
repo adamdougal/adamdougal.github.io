@@ -1,10 +1,9 @@
 ---
-layout: post
-title:  "Welcome to Dougal Tech!"
-date:   2024-06-07 15:00:00 +0100
-categories: Misc
-tags: background
+layout: page
+title: About
+permalink: /about/
 ---
+
 
 ## Hey there, I'm Adam!
 
