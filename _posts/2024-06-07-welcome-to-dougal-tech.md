@@ -8,6 +8,8 @@ tags: background
 
 ## Hey there, I'm Adam!
 
+![face](https://avatars.githubusercontent.com/u/1589887)
+
 Welcome! 👋👋
 
 I'm **Adam Dougal**, a software engineer currently crafting solutions at 
