@@ -48,9 +48,27 @@ This is the simpler of the two methods and involves uploading the dataset to a b
 it into Azure Custom Speech. After the dataset is imported, you can use the Python code below to create **and** upload 
 the dataset to Azure Custom Speech.
 
+```python
+import requests
 
-<script src="https://gist.github.com/adamdougal/6b9a554c950a79786e54d9a99dc98744.js"></script>
+request_url = "https://<your-speech-service-url>/speechtotext/v3.2/datasets"
+request_headers = {
+    "Ocp-Apim-Subscription-Key": "<your-subscription-key>",
+    "Content-Type": "application/json"
+}
+request_body = {
+    "project": {
+        "self": "https://<your-speech-service-url>/speechtotext/v3.2/projects/<your-project-id>"
+    },
+    "displayName": "my-dataset",
+    "kind": "Acoustic",
+    "locale": "en-US",
+    "contentUrl": "<url-to-content>"
 
+}
+response = requests.post(request_url, headers=request_headers, json=request_body)
+dataset_url = response.json()["self"]
+```
 
 Note the `contentUrl` field in the data dictionary.
 
@@ -72,8 +90,123 @@ To upload a dataset to Azure Custom Speech using the REST API, you will need to 
 See the Python code below for an example of how to upload a dataset to Azure Custom Speech using the REST API from your 
 local machine.
 
-<script src="https://gist.github.com/adamdougal/d9705bf3a78366e5835704ce3bacb54b.js"></script>
+```python
+import requests
+import os
+import base64
 
+
+def create_dataset(project_url: str) -> str:
+    """
+    Create a new dataset in the given project with the given name.
+
+    :param project_url: The URL of the project to create the dataset in.
+    :return: The URL of the created dataset.
+    """
+
+    request_url = "https://<your-speech-service-url>/speechtotext/v3.2/datasets"
+    request_headers = {
+        "Ocp-Apim-Subscription-Key": "<your-subscription-key>",
+        "Content-Type": "application/json"
+    }
+    request_body = {
+        "project": {"self": project_url},
+        "kind": "Acoustic",
+        "locale": "en-US",
+        "displayName": "my-dataset",
+    }
+
+
+    response = requests.post(
+        request_url,
+        headers=request_headers,
+        json=request_body,
+    )
+    
+    return response.json()["self"]
+
+
+def upload_dataset_blocks(dataset_url: str, dataset_path: str) -> list[str]:
+    """
+    Upload the dataset blocks to the given dataset URL. If the dataset file is not found, an FileNotFoundError is 
+    raised.
+
+    :param dataset_url: The URL of the dataset to upload the blocks to.
+    :param dataset_path: The file path to the dataset.
+    :return: A list containing the block IDs uploaded.
+    """
+    
+    if not os.path.isfile(dataset_path):
+        raise FileNotFoundError(
+            f"Training dataset file not found at '{dataset_path}'"
+        )
+
+    buffer_size = 4 * 1024 * 1024
+    block_ids = []
+    i = 0
+    with open(dataset_path, "rb") as data:
+        file_contents = data.read(buffer_size)
+
+        while len(file_contents) != 0:
+            # Generates block IDs in the format '00000000' to '99999999'
+            block_id = base64.b64encode("{:08d}".format(i).encode("utf-8")).decode(
+                "utf-8"
+            )
+            block_ids.append(block_id)
+            upload_block(dataset_url, file_contents, block_id)
+
+            file_contents = data.read(buffer_size)
+            i += 1
+
+    return block_ids
+
+
+def upload_block(dataset_url: str, data: bytes, block_id: str) -> None:
+    request_url = os.path.join(dataset_url, "blocks")
+    request_params = {"blockid": block_id}
+    request_headers = {
+        "Ocp-Apim-Subscription-Key": "<your-subscription-key>",
+        "Content-Type": "application/octet-stream"
+    }
+
+    requests.put(
+        request_url,
+        params=request_params,
+        headers=request_headers,
+        data=data,
+    )
+
+
+def commit_dataset_blocks(dataset_url: str, block_ids: list[str]) -> None:
+    """
+    Commit the dataset blocks to the given dataset URL. This triggers the processing of the dataset blocks in
+    Azure Speech Service.
+
+    :param dataset_url: The URL of the dataset to commit the blocks to.
+    :param block_ids: A list of block IDs to commit.
+    :return: None
+    """
+    request_url = os.path.join(dataset_url, "blocks:commit")
+    request_headers = {
+        "Ocp-Apim-Subscription-Key": "<your-subscription-key>",
+        "Content-Type": "application/json"
+    }
+    request_body = [{"kind": "Latest", "id": block_id} for block_id in block_ids]
+
+    requests.post(
+        request_url,
+        headers=request_headers,
+        json=request_body,
+    )
+
+
+project_url = "https://<your-speech-service-url>/speechtotext/v3.2/projects/<your-project-id>"
+dataset_path = "<path-to-dataset>"
+
+dataset_url = create_dataset(project_url)
+block_ids = upload_dataset_blocks(dataset_url, dataset_path)
+commit_dataset_blocks(dataset_url, block_ids)
+```
 
 
 Note that the `upload_dataset_blocks` function reads the dataset file in blocks of 4MB and uploads each block to Azure

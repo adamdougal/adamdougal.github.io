@@ -39,7 +39,12 @@ Qualcomm, AMD, Nvidia, or Intel.
 
 To get started, install Olive and its dependencies. Use the following commands:
 
-<script src="https://gist.github.com/adamdougal/3505c44a96bf4efdff8e1e442c0de5f6.js"></script>
+```bash
+pip install olive-ai[auto-opt,finetune,cpu] 
+pip install transformers==4.44.2
+pip install autoawq
+pip install auto-gptq
+```
 
 > If you plan to run Olive on a GPU, replace `cpu` with `gpu` in the Olive installation command to ensure GPU 
 > dependencies are installed. Note, fine-tuning requires a GPU to achieve efficient training speeds.
@@ -57,7 +62,13 @@ to optimize for performance and resource efficiency.
 
 Here’s a basic example for performing quantization:
 
-<script src="https://gist.github.com/adamdougal/44563607e3be044813e35e651cc0bc56.js"></script>
+```bash
+olive quantize \
+    --model_name_or_path microsoft/Phi-3.5-mini-instruct \
+    --algorithm awq \
+    --precision int4 \
+    --output_path ./models/quantized_phi-3.5
+```
 
 **Explanation of Parameters:**
 - `--model_name_or_path`: Specifies the path to the pre-trained model (e.g. a Hugging Face model like 
@@ -87,8 +98,11 @@ To ensure dataset quality:
 The input data should be in a structured format, such as JSONL, where each line represents one sample. Here’s an 
 example:
 
-<script src="https://gist.github.com/adamdougal/f31b2b914e2181d8825ec22463bc9ba2.js"></script>
+```jsonl
+{"system_prompt": "Translate English to French.", "prompt": "Hello, how are you?", "ground_truth": "Bonjour comment allez-vous?"}
+{"system_prompt": "Summarize the following text:", "prompt": "The quick brown fox jumps over the lazy dog.", "ground_truth": "Fox jumps over dog."}
 
+```
 Each line represents a training sample with fields for the system’s instruction (`system_prompt`), user input 
 (`prompt`), and expected output (`ground_truth`).
 
@@ -96,7 +110,19 @@ Each line represents a training sample with fields for the system’s instructio
 
 Here’s the script for fine-tuning:
 
-<script src="https://gist.github.com/adamdougal/7b5640f600af2aed9ded8a953638b040.js"></script>
+```bash
+olive finetune \
+  --model_name_or_path ./models/quantized_phi-3.5 \
+  --data_name data/ \
+  --train_split "train[:80%]" \
+  --eval_split "train[20%:]" \
+  --text_template "<|system|>\n{system_prompt}<|end|>\n<|user|>\n{prompt}<|end|>\n<|assistant|>\n{ground_truth}<|end|>" \
+  --per_device_train_batch_size 16 \
+  --per_device_eval_batch_size 16 \
+  --max_steps 100 \
+  --report_to azure_ml \
+  --output_path ./models/fine_tuned_phi-3.5
+```
 
 **Explanation of Parameters:**
 - `--model_name_or_path`: The path to the quantized model or a Hugging Face/local model to fine-tune.
@@ -124,11 +150,24 @@ Note that the latest release of Olive does not automatically download the requir
 You must download these files manually. This issue is resolved in the main branch of Olive but is not yet released. You 
 can retrieve the required files by running:
 
-<script src="https://gist.github.com/adamdougal/57fd517f1a008aa761181c6aaba793a8.js"></script>
+```bash
+curl https://huggingface.co/microsoft/Phi-3.5-mini-instruct/raw/main/modeling_phi3.py -o "./models/fine_tuned_phi-3.5/model/modeling_phi3.py"
+curl https://huggingface.co/microsoft/Phi-3.5-mini-instruct/raw/main/configuration_phi3.py -o "./models/fine_tuned_phi-3.5/model/configuration_phi3.py"
+```
 
 Here’s the script for exporting:
 
-<script src="https://gist.github.com/adamdougal/b8ee754247de676d33b5e9446e511564.js"></script>
+```bash
+olive auto-opt \
+   --model_name_or_path ./models/fine_tuned_phi-3.5/model \
+   --adapter_path ./models/fine_tuned_phi-3.5/adapter \
+   --device cpu \
+   --provider CPUExecutionProvider \
+   --precision int4 \
+   --use_ort_genai \
+   --output_path ./models/exported_phi-3.5
+
+```
 
 **Explanation of Parameters:**
 - `--model_name_or_path`: Path to the model to be exported.
