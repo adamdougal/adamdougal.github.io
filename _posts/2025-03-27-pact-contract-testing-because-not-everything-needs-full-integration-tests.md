@@ -6,8 +6,6 @@ categories: Testing
 tags: testing pact contract-testing integration-testing java spring-boot
 ---
 
-# PACT Contract Testing - Because Not Everything Needs Full Integration Tests
-
 I am a big fan of integration tests. I think they are the best way to test that your system works as a whole, but
 sometimes, integration tests are overkill or too complex to set up that the return on investment is just not worth it.
 So what do you do then? You could write unit tests, but they only test the applications in isolation. That's where
