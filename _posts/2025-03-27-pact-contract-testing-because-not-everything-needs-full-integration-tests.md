@@ -278,7 +278,7 @@ wish to be setting the target URL to the real service:
     @TestTemplate
     @ExtendWith(PactVerificationInvocationContextProvider.class)
     void verifyPact(PactVerificationContext context) {
-      context.verifyInteraction();
+          context.verifyInteraction();
     }
 ```
 
