@@ -313,7 +313,7 @@ for a full working example of the provider side of PACT.
 In the examples above, we have used the `@PactDirectory` annotation to specify the location of the contract files. These
 can then just be committed to git. However, unless you're using a monorepo, you will need to store the contract files in
 a shared location that is accessible to both the consumer and provider systems. This could be a dedicated contract file
-repostitory, where the consumers will need to manually copy the contract files and the providers will need to test
+repository, where the consumers will need to manually copy the contract files and the providers will need to test
 against a pre-deployed system.
 
 Alternatively, you can use the [PACT broker](https://docs.pact.io/pact_broker) to store the contract files. The PACT 
