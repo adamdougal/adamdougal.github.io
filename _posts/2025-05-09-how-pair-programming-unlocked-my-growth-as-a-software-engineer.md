@@ -62,7 +62,9 @@ they would rotate to something new, and another engineer would join me. Of cours
 number of engineers due to holidays or sickness, and in those cases we would work solo, but most of the time, we were
 pairing.
 
-No one had laptops. We just had shared workstations that were all set up the same way.
+No one had laptops. We just had shared workstations that were all set up the same way. Two monitors, two keyboards and
+two mice. So either of the engineers could take control at any time.
+
 ![Pair programming at Sky](/images/cirrus-pairing.png)
 
 ## The Results: Rapid Growth and Promotion
